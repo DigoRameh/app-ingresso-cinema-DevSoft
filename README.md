@@ -18,4 +18,4 @@ FastTickets é um aplicativo desenvolvido para facilitar a compra e o gerenciame
 
 - **frontend/**: Contém o código da interface do usuário, incluindo componentes, estilos e lógica de interação com o usuário.
 - **backend/**: Inclui o código do servidor e APIs para lidar com autenticação, processamento de pagamentos e interação com o banco de dados.
-- **docs/**: Contém documentação adicional do projeto, como arquitetura, fluxos de dados, e instruções detalhadas para instalação e uso.
+- **docs/**: Contém documentação adicional do projeto, como arquitetura, fluxos de dados.
