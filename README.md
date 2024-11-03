@@ -11,8 +11,8 @@ FastTickets é um aplicativo desenvolvido para facilitar a compra e o gerenciame
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Frontend**: React
-- **Banco de Dados**: SQLite
+- **Linguagem de programação**: JavaScript/React Native
+- **Banco de Dados**: Firebase
 
 ## 📂 Estrutura do Projeto
 
