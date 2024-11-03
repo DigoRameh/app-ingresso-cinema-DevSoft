@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { getNowPlayingMovies } from './api';
 
-const NowPlayingScreen = () => {
+const Filmes = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
@@ -27,4 +27,4 @@ const NowPlayingScreen = () => {
   );
 };
 
-export default NowPlayingScreen;
+export default Filmes;
