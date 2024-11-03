@@ -7,7 +7,7 @@ const HomeScreen = ({ navigation }) => {
       <Text>tela</Text>
       <Button
         title="Tela de login"
-        onPress={() => navigation.navigate('Login')}
+        onPress={() => navigation.navigate('LoginPage')}
       />
     </View>
   );
