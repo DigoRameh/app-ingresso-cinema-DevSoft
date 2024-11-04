@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 const API_KEY = '0a9f7e226d56b50c0105cbdeef5bf44d';
 const ITEM_WIDTH = Dimensions.get('window').width / 3 - 16;
@@ -18,6 +19,7 @@ const getNowPlayingMovies = async () => {
 };
 
 const MovieCover = ({ movieId, title }) => {
+  const navigation = useNavigation();
   const [posterPath, setPosterPath] = useState('');
 
   useEffect(() => {
@@ -39,7 +41,7 @@ const MovieCover = ({ movieId, title }) => {
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.posterContainer}>
+    <TouchableOpacity onPress={() => navigation.navigate('FilmesDetalhes',{ movieId})} style={styles.posterContainer}>
       {posterPath ? (
         <Image source={{ uri: posterPath }} style={styles.posterImage} />
       ) : (
