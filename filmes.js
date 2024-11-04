@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   bottomBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingVertical: 15,
+    paddingVertical: 20,
     backgroundColor: '#ffffff',
     borderTopWidth: 0,
     borderColor: '#ccc',
@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconImage: {
-    width: 24,
-    height: 24,
+    width: 22,
+    height: 18,
   },
 });
 
