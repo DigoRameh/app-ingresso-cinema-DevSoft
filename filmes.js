@@ -3,7 +3,7 @@ import { View, Text, FlatList, Image, StyleSheet, Dimensions, TouchableOpacity, 
 import axios from 'axios';
 
 const API_KEY = '0a9f7e226d56b50c0105cbdeef5bf44d';
-const ITEM_WIDTH = Dimensions.get('window').width / 3 - 16; // Largura dividida por 3, com margem.
+const ITEM_WIDTH = Dimensions.get('window').width / 3 - 16;
 
 const getNowPlayingMovies = async () => {
   try {
@@ -36,7 +36,6 @@ const MovieCover = ({ movieId, title }) => {
 
   const handlePress = () => {
     Alert.alert("Filme Selecionado", title);
-    // Aqui você pode usar a navegação para uma tela de detalhes, se desejado
   };
 
   return (
@@ -63,7 +62,7 @@ const Filmes = () => {
       <FlatList
         data={movies}
         keyExtractor={(item) => item.id.toString()}
-        numColumns={3} // Layout em grid com 3 colunas
+        numColumns={3}
         renderItem={({ item }) => (
           <View style={styles.movieContainer}>
             <MovieCover movieId={item.id} title={item.title} />
@@ -71,6 +70,20 @@ const Filmes = () => {
           </View>
         )}
       />
+      <View style={styles.bottomBar}>
+        <TouchableOpacity style={styles.bottomBarButton} onPress={() => Alert.alert("Home")}>
+          <Image source={require('./assets/home.png')} style={styles.iconImage} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bottomBarButton} onPress={() => Alert.alert("Buscar")}>
+          <Image source={require('./assets/busca.png')} style={styles.iconImage} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bottomBarButton} onPress={() => Alert.alert("Ingressos")}>
+          <Image source={require('./assets/ingresso.png')} style={styles.iconImage} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bottomBarButton} onPress={() => Alert.alert("Perfil")}>
+          <Image source={require('./assets/perfil.png')} style={styles.iconImage} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -107,6 +120,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 4,
+  },
+  bottomBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 15,
+    backgroundColor: '#ffffff',
+    borderTopWidth: 0,
+    borderColor: '#ccc',
+  },
+  bottomBarButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconImage: {
+    width: 24,
+    height: 24,
   },
 });
 
