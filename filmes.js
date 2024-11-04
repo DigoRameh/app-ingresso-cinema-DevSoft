@@ -8,7 +8,7 @@ const ITEM_WIDTH = Dimensions.get('window').width / 3 - 16;
 const getNowPlayingMovies = async () => {
   try {
     const response = await axios.get('https://api.themoviedb.org/3/movie/now_playing', {
-      params: { api_key: API_KEY },
+      params: { api_key: API_KEY, language: 'pt-BR' },
     });
     return response.data.results;
   } catch (error) {

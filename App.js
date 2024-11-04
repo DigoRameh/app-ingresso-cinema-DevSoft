@@ -5,6 +5,7 @@ import HomeScreen from './HomeScreen';
 import LoginPage from './LoginPage'; 
 import SignUp from './SignUp'; 
 import Filmes from './filmes';
+import FilmesDetalhesScreen from './FilmesDetalhesScreen'
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Filmes">
         <Stack.Screen name="Filmes" component={Filmes} />
+        <Stack.Screen name="FilmesDetalhes" component={FilmesDetalhesScreen} options={{ title: 'Detalhes do Filme' }} />
         <Stack.Screen name="LoginPage" component={LoginPage} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Home" component={HomeScreen} />
