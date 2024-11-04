@@ -40,7 +40,7 @@ const MovieDetailsScreen = ({ route }) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       {movieDetails && (
         <>
           <Image
@@ -61,8 +61,10 @@ const MovieDetailsScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
     backgroundColor: '#fff',
+  },
+  contentContainer: {
+    padding: 15,
   },
   loaderContainer: {
     flex: 1,
