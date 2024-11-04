@@ -13,6 +13,7 @@ FastTickets é um aplicativo desenvolvido para facilitar a compra e o gerenciame
 
 - **Linguagem de programação**: JavaScript/React Native
 - **Banco de Dados**: Firebase
+- **APIs**: The Movie Database (TMDB) - API utilizada para acessar os filmes e os respectivos detalhes
 
 ## 📂 Estrutura do Projeto
 
