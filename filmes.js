@@ -18,7 +18,7 @@ const getNowPlayingMovies = async () => {
   }
 };
 
-const MovieCover = ({ movieId, title }) => {
+const MovieCover = ({ movieId }) => {
   const navigation = useNavigation();
   const [posterPath, setPosterPath] = useState('');
 
@@ -36,10 +36,6 @@ const MovieCover = ({ movieId, title }) => {
     fetchMovieDetails();
   }, [movieId]);
 
-  const handlePress = () => {
-    Alert.alert("Filme Selecionado", title);
-  };
-
   return (
     <TouchableOpacity onPress={() => navigation.navigate('FilmesDetalhes',{ movieId})} style={styles.posterContainer}>
       {posterPath ? (
@@ -52,6 +48,7 @@ const MovieCover = ({ movieId, title }) => {
 };
 
 const Filmes = () => {
+  const navigation = useNavigation();
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
@@ -73,7 +70,7 @@ const Filmes = () => {
         )}
       />
       <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.bottomBarButton} onPress={() => Alert.alert("Home")}>
+        <TouchableOpacity style={styles.bottomBarButton} onPress={() => navigation.navigate('Filmes')}>
           <Image source={require('./assets/home.png')} style={styles.iconImage} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomBarButton} onPress={() => Alert.alert("Buscar")}>
