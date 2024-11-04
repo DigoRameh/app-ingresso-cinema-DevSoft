@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconImage: {
-    width: 22,
+    width: 20,
     height: 18,
   },
 });
