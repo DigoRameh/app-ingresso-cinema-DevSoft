@@ -1,27 +1,64 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SeatSelectionScreen = ({ route, navigation }) => {
   const { movieTitle, sessionTime } = route.params;
+  
+  // Estado para armazenar os assentos reservados
+  const [reservedSeats, setReservedSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
+
+  // Carregar os assentos reservados ao montar o componente
+  useEffect(() => {
+    const loadReservedSeats = async () => {
+      try {
+        // Tenta carregar os assentos reservados para a sessão atual
+        const storedReservedSeats = await AsyncStorage.getItem(`reservedSeats_${sessionTime}`);
+        if (storedReservedSeats) {
+          setReservedSeats(JSON.parse(storedReservedSeats));
+        }
+      } catch (error) {
+        console.error("Erro ao carregar os assentos reservados", error);
+      }
+    };
+
+    loadReservedSeats();
+  }, [sessionTime]);
+
+  // Função para salvar os assentos reservados no AsyncStorage
+  const saveReservedSeats = async (newReservedSeats) => {
+    try {
+      await AsyncStorage.setItem(`reservedSeats_${sessionTime}`, JSON.stringify(newReservedSeats));
+      setReservedSeats(newReservedSeats); // Atualiza o estado local com os novos assentos reservados
+    } catch (error) {
+      console.error("Erro ao salvar os assentos reservados", error);
+    }
+  };
 
   const toggleSeatSelection = (row, col) => {
     const seat = `${row}${col}`;
+    
+    // Verifique se o assento já está reservado
+    if (reservedSeats.includes(seat)) {
+      Alert.alert('Esse assento já foi reservado!');
+      return;
+    }
+
     setSelectedSeats(prevSelectedSeats => {
-      // Verificar se o assento já está selecionado
       if (prevSelectedSeats.includes(seat)) {
-        // Se estiver, remove apenas o assento clicado
         return prevSelectedSeats.filter(selectedSeat => selectedSeat !== seat);
       } else {
-        // Se não estiver, adiciona o assento à lista
         return [...prevSelectedSeats, seat];
       }
     });
   };
 
-  // Função para prosseguir para o pagamento
-  const handleProceedToPayment = () => {
+  const handleProceedToPayment = async () => {
     if (selectedSeats.length > 0) {
+      // Salvar os assentos reservados no AsyncStorage após a seleção
+      const updatedReservedSeats = [...reservedSeats, ...selectedSeats];
+      await saveReservedSeats(updatedReservedSeats);
       navigation.navigate('PaymentScreen', { selectedSeats, movieTitle, sessionTime });
     } else {
       Alert.alert('Selecione pelo menos um assento para prosseguir!');
@@ -37,20 +74,21 @@ const SeatSelectionScreen = ({ route, navigation }) => {
 
       <View style={styles.seatingChart}>
         <View style={styles.seatsContainer}>
-          {/* Mapa de assentos invertido (de F a A) */}
           {['F', 'E', 'D', 'C', 'B', 'A'].map((row, rowIndex) => (
             <View key={rowIndex} style={styles.row}>
-              <Text style={styles.rowLabel}>{row}</Text> {/* Letras na lateral */}
+              <Text style={styles.rowLabel}>{row}</Text>
               {Array.from({ length: 7 }, (_, colIndex) => {
                 const seatId = `${row}${colIndex + 1}`;
                 const isSelected = selectedSeats.includes(seatId);
+                const isReserved = reservedSeats.includes(seatId); // Verifica se o assento está reservado
                 return (
                   <TouchableOpacity
                     key={colIndex}
-                    style={[styles.seat, isSelected && styles.selectedSeat]}
-                    onPress={() => toggleSeatSelection(row, colIndex + 1)}
+                    style={[styles.seat, isSelected && styles.selectedSeat, isReserved && styles.reservedSeat]} // Adiciona estilo para assentos reservados
+                    onPress={() => !isReserved && toggleSeatSelection(row, colIndex + 1)} // Impede a seleção de assentos reservados
+                    disabled={isReserved} // Desabilita a seleção de assentos reservados
                   >
-                    <Text style={styles.seatText}>{colIndex + 1}</Text> {/* Texto dentro do TouchableOpacity */}
+                    <Text style={styles.seatText}>{colIndex + 1}</Text>
                   </TouchableOpacity>
                 );
               })}
@@ -58,10 +96,9 @@ const SeatSelectionScreen = ({ route, navigation }) => {
           ))}
         </View>
 
-        {/* Tela abaixo do mapa de assentos */}
         <View style={styles.screenContainer}>
-          <Text style={styles.screen}></Text>
-          <Text style={styles.screenLabel}>TELA</Text> {/* Texto TELA na parte inferior */}
+          <View style={styles.screen} />
+          <Text style={styles.screenLabel}>TELA</Text>
         </View>
       </View>
 
@@ -74,7 +111,7 @@ const SeatSelectionScreen = ({ route, navigation }) => {
           onPress={handleProceedToPayment}
           disabled={selectedSeats.length === 0}
         >
-          <Text style={styles.proceedButtonText}>Prosseguir para Pagamento</Text> {/* Texto dentro do botão */}
+          <Text style={styles.proceedButtonText}>Prosseguir para Pagamento</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -131,6 +168,9 @@ const styles = StyleSheet.create({
   },
   selectedSeat: {
     backgroundColor: '#f39c12',
+  },
+  reservedSeat: {
+    backgroundColor: '#e74c3c', // Cor para assentos reservados
   },
   seatText: {
     color: '#fff',

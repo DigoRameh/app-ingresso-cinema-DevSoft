@@ -109,7 +109,6 @@ const MovieDetailsScreen = ({ route, navigation }) => {
     if (isPastSession(sessionTime)) {
       Alert.alert("Este horário já passou", "Escolha outro horário disponível.");
     } else {
-      Alert.alert("Sessão escolhida", `Você escolheu a sessão de ${sessionTime}`);
       // Passando o nome do filme, poster e horário para a próxima tela
       navigation.navigate('SeatSelection', { 
         sessionTime, 

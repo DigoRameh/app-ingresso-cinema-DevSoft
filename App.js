@@ -11,7 +11,8 @@ import FilmesDetalhesScreen2 from './FilmesDetalhesScreen2';
 import ProfileScreen from './ProfileScreen'; 
 import SearchPage from './BuscaScreen'; 
 import SeatSelectionScreen from './SeatSelection';
-// import IngressosScreen from './IngressosScreen'; // Supondo que você tenha uma tela de Ingressos
+import PaymentScreen from './PaymentScreen';
+// import IngressoScreen from './IngressoScreen'; 
 import Icon from 'react-native-vector-icons/FontAwesome'; // Usando FontAwesome
 
 
@@ -71,6 +72,7 @@ const App = () => {
           <Stack.Screen name="FilmesDetalhes" component={FilmesDetalhesScreen} />
           <Stack.Screen name="FilmesDetalhes2" component={FilmesDetalhesScreen2} />
           <Stack.Screen name="SeatSelection" component={SeatSelectionScreen} />
+          <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
