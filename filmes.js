@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from './AuthContext'; // Importar o contexto de autenticação
 
 const API_KEY = '0a9f7e226d56b50c0105cbdeef5bf44d';
 const ITEM_WIDTH = Dimensions.get('window').width / 3 - 16;
@@ -37,7 +38,7 @@ const MovieCover = ({ movieId }) => {
   }, [movieId]);
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('FilmesDetalhes',{ movieId})} style={styles.posterContainer}>
+    <TouchableOpacity onPress={() => navigation.navigate('FilmesDetalhes', { movieId })} style={styles.posterContainer}>
       {posterPath ? (
         <Image source={{ uri: posterPath }} style={styles.posterImage} />
       ) : (
@@ -49,6 +50,7 @@ const MovieCover = ({ movieId }) => {
 
 const Filmes = () => {
   const navigation = useNavigation();
+  const { isAuthenticated } = useAuth(); // Usar o hook para pegar o estado de autenticação
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
@@ -57,7 +59,6 @@ const Filmes = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Filmes em Exibição</Text>
       <FlatList
         data={movies}
         keyExtractor={(item) => item.id.toString()}
@@ -69,20 +70,6 @@ const Filmes = () => {
           </View>
         )}
       />
-      <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.bottomBarButton} onPress={() => navigation.navigate('Filmes')}>
-          <Image source={require('./assets/home.png')} style={styles.iconImage} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarButton} onPress={() => Alert.alert("Buscar")}>
-          <Image source={require('./assets/busca.png')} style={styles.iconImage} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarButton} onPress={() => Alert.alert("Ingressos")}>
-          <Image source={require('./assets/ingresso.png')} style={styles.iconImage} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarButton} onPress={() => Alert.alert("Perfil")}>
-          <Image source={require('./assets/perfil.png')} style={styles.iconImage} />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -92,12 +79,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 8,
     backgroundColor: '#fff',
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 16,
   },
   movieContainer: {
     width: ITEM_WIDTH,
@@ -119,22 +100,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 4,
-  },
-  bottomBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 20,
-    backgroundColor: '#ffffff',
-    borderTopWidth: 0,
-    borderColor: '#ccc',
-  },
-  bottomBarButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconImage: {
-    width: 20,
-    height: 18,
   },
 });
 

@@ -1,191 +1,127 @@
-import * as React from "react";
-import {Image, StyleSheet, View, Text} from "react-native";
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 
-const Cadastro = () => {
-  	
-  	return (
-    		<View style={styles.cadastro}>
-      			<Image style={styles.logoIcon} resizeMode="cover" source="Logo.png" />
-      			<Image style={[styles.cadastroChild, styles.lineIconLayout]} resizeMode="cover" source="Line 1.png" />
-      			<View style={[styles.cadastroItem, styles.cadastroLayout]} />
-      			<View style={[styles.cadastroInner, styles.cadastroLayout]} />
-      			<Image style={[styles.lineIcon, styles.lineIconLayout]} resizeMode="cover" source="Line 2.png" />
-      			<View style={[styles.rectangleView, styles.rectangleViewLayout]} />
-      			<Image style={[styles.pngtreeblackPadlock6581266Icon, styles.iconLayout]} resizeMode="cover" source="—Pngtree—black-padlock_6581266 1.png" />
-      			<Image style={[styles.pngtreeblackPadlock6581266Icon1, styles.iconLayout]} resizeMode="cover" source="—Pngtree—black-padlock_6581266 2.png" />
-      			<View style={[styles.cadastroChild1, styles.rectangleViewLayout]} />
-      			<Text style={styles.cadastro1}>Cadastro</Text>
-      			<Image style={[styles.pessoaloginIcon, styles.iconLayout]} resizeMode="cover" source="PessoaLogin.png" />
-      			<View style={[styles.barraUsurio, styles.barraLayout]}>
-        				<View style={styles.recShadowBox} />
-        				<Text style={[styles.email, styles.emailTypo]}>Email</Text>
-      			</View>
-      			<View style={[styles.barraSenha, styles.barraLayout]}>
-        				<View style={styles.recShadowBox} />
-        				<Text style={[styles.email, styles.emailTypo]}>Senha</Text>
-      			</View>
-      			<View style={[styles.barraSenha1, styles.barraLayout]}>
-        				<View style={styles.recShadowBox} />
-        				<Text style={[styles.email, styles.emailTypo]}>Repita a senha</Text>
-      			</View>
-      			<View style={styles.cadastroChild2} />
-      			<Text style={[styles.cadastrar, styles.emailTypo]}>Cadastrar</Text>
-    		</View>);
+const SignUpPage = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const navigation = useNavigation();
+
+  const handleSignUp = async () => {
+    if (!name || !email || !password || !confirmPassword) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Erro', 'As senhas não coincidem.');
+      return;
+    }
+
+    try {
+      const existingUser = await AsyncStorage.getItem(email);
+      if (existingUser) {
+        Alert.alert('Erro', 'Usuário já cadastrado com este email.');
+      } else {
+        const newUser = { name, email, password };
+        await AsyncStorage.setItem(email, JSON.stringify(newUser));
+        Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
+
+        // Reseta a pilha de navegação para a tela de login
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'LoginPage' }],
+          })
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Erro', 'Ocorreu um erro ao tentar realizar o cadastro.');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Cadastrar</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Nome"
+        placeholderTextColor="#bbb"
+        value={name}
+        onChangeText={setName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        placeholderTextColor="#bbb"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Senha"
+        placeholderTextColor="#bbb"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Confirmar Senha"
+        placeholderTextColor="#bbb"
+        secureTextEntry
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+      />
+
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>Cadastrar</Text>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-  	lineIconLayout: {
-    		height: 153,
-    		width: 176,
-    		position: "absolute"
-  	},
-  	cadastroLayout: {
-    		height: 1,
-    		width: 352,
-    		borderTopWidth: 1,
-    		borderColor: "#0097b2",
-    		borderStyle: "solid",
-    		position: "absolute"
-  	},
-  	rectangleViewLayout: {
-    		height: 125,
-    		width: 103,
-    		backgroundColor: "#0097b2",
-    		borderRadius: 20,
-    		position: "absolute"
-  	},
-  	iconLayout: {
-    		height: 31,
-    		width: 31,
-    		left: 34,
-    		position: "absolute"
-  	},
-  	barraLayout: {
-    		width: 295,
-    		left: 65,
-    		height: 31,
-    		position: "absolute"
-  	},
-  	emailTypo: {
-    		fontSize: 16,
-    		textAlign: "left",
-    		color: "#000",
-    		fontFamily: "RampartOne-Regular",
-    		position: "absolute"
-  	},
-  	logoIcon: {
-    		top: 662,
-    		left: 143,
-    		width: 250,
-    		height: 195,
-    		position: "absolute"
-  	},
-  	cadastroChild: {
-    		top: 706,
-    		left: -13
-  	},
-  	cadastroItem: {
-    		top: 539,
-    		left: 42
-  	},
-  	cadastroInner: {
-    		top: 158,
-    		left: 21
-  	},
-  	lineIcon: {
-    		top: 462,
-    		left: -15
-  	},
-  	rectangleView: {
-    		top: 794,
-    		left: -51
-  	},
-  	pngtreeblackPadlock6581266Icon: {
-    		top: 388
-  	},
-  	pngtreeblackPadlock6581266Icon1: {
-    		top: 429
-  	},
-  	cadastroChild1: {
-    		top: -62,
-    		left: 341
-  	},
-  	cadastro1: {
-    		top: 88,
-    		fontSize: 48,
-    		textAlign: "left",
-    		color: "#000",
-    		fontFamily: "RampartOne-Regular",
-    		left: 82,
-    		position: "absolute"
-  	},
-  	pessoaloginIcon: {
-    		top: 347
-  	},
-  	recShadowBox: {
-    		opacity: 0.8,
-    		borderWidth: 1,
-    		borderColor: "#000",
-    		backgroundColor: "#d9d9d9",
-    		elevation: 20,
-    		shadowRadius: 20,
-    		left: "0%",
-    		bottom: "0%",
-    		right: "0%",
-    		top: "0%",
-    		height: "100%",
-    		borderRadius: 10,
-    		shadowOpacity: 1,
-    		shadowOffset: {
-      			width: 0,
-      			height: 4
-    		},
-    		shadowColor: "rgba(0, 0, 0, 0.25)",
-    		borderStyle: "solid",
-    		position: "absolute",
-    		width: "100%"
-  	},
-  	email: {
-    		top: "12.9%",
-    		left: "3.05%"
-  	},
-  	barraUsurio: {
-    		top: 347
-  	},
-  	barraSenha: {
-    		top: 388
-  	},
-  	barraSenha1: {
-    		top: 431
-  	},
-  	cadastroChild2: {
-    		top: 480,
-    		shadowRadius: 4,
-    		elevation: 4,
-    		width: 247,
-    		height: 36,
-    		borderRadius: 10,
-    		shadowOpacity: 1,
-    		shadowOffset: {
-      			width: 0,
-      			height: 4
-    		},
-    		shadowColor: "rgba(0, 0, 0, 0.25)",
-    		left: 82,
-    		backgroundColor: "#0097b2",
-    		position: "absolute"
-  	},
-  	cadastrar: {
-    		top: "57.04%",
-    		left: "41.48%"
-  	},
-  	cadastro: {
-    		backgroundColor: "#fff",
-    		flex: 1,
-    		height: 852,
-    		overflow: "hidden",
-    		width: "100%"
-  	}
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#3d3d3d',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  input: {
+    height: 45,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 25,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 15,
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    borderRadius: 25,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 });
 
-export default Cadastro;
+export default SignUpPage;
