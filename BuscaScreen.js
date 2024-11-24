@@ -62,7 +62,7 @@ const SearchPage = () => {
   };
 
   const navigateToDetails = (movieId) => {
-    navigation.navigate('FilmesDetalhes', { movieId });
+    navigation.navigate('FilmesDetalhes2', { movieId });
   };
 
   return (

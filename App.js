@@ -7,6 +7,7 @@ import LoginPage from './LoginPage';
 import SignUp from './SignUp';
 import Filmes from './Filmes';
 import FilmesDetalhesScreen from './FilmesDetalhesScreen';
+import FilmesDetalhesScreen2 from './FilmesDetalhesScreen2';
 import ProfileScreen from './ProfileScreen'; 
 import SearchPage from './BuscaScreen'; 
 // import IngressosScreen from './IngressosScreen'; // Supondo que você tenha uma tela de Ingressos
@@ -66,6 +67,7 @@ const App = () => {
           <Stack.Screen name="LoginPage" component={LoginPage} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="FilmesDetalhes" component={FilmesDetalhesScreen} />
+          <Stack.Screen name="FilmesDetalhes2" component={FilmesDetalhesScreen2} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
