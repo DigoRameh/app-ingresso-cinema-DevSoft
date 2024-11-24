@@ -40,7 +40,7 @@ const generateSessionTimes = () => {
   return sessionDays;
 };
 
-const MovieDetailsScreen = ({ route }) => {
+const MovieDetailsScreen = ({ route, navigation }) => {
   const { movieId } = route.params;
   const [movieDetails, setMovieDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -110,6 +110,13 @@ const MovieDetailsScreen = ({ route }) => {
       Alert.alert("Este horário já passou", "Escolha outro horário disponível.");
     } else {
       Alert.alert("Sessão escolhida", `Você escolheu a sessão de ${sessionTime}`);
+      // Passando o nome do filme, poster e horário para a próxima tela
+      navigation.navigate('SeatSelection', { 
+        sessionTime, 
+        movieId, 
+        movieTitle: movieDetails.title,  // Passa o título do filme
+        moviePoster: movieDetails.poster_path // Passa o poster do filme
+      });
     }
   };
 
