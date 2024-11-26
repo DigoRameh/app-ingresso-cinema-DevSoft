@@ -11,9 +11,12 @@ import {
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from './AuthContext';
 
 const PaymentScreen = ({ route, navigation }) => {
   const { selectedSeats, movieTitle, sessionTime } = route.params;
+  const { user } = useAuth();
 
   const ticketPrice = 20.0;
   const halfTicketPrice = ticketPrice / 2;
@@ -30,7 +33,27 @@ const PaymentScreen = ({ route, navigation }) => {
 
   const totalPrice = fullTickets * ticketPrice + halfTickets * halfTicketPrice;
 
-  const handlePayment = () => {
+  const saveTickets = async (newTicket) => {
+    try {
+      if (!user) throw new Error('Usuário não logado');
+
+      const storedTickets = await AsyncStorage.getItem(`tickets_${user.username}`);
+      let tickets = storedTickets ? JSON.parse(storedTickets) : [];
+
+      if (!Array.isArray(tickets)) {
+        tickets = [];
+      }
+
+      tickets.push(newTicket);
+
+      await AsyncStorage.setItem(`tickets_${user.username}`, JSON.stringify(tickets));
+      console.log('Ingressos salvos com sucesso');
+    } catch (error) {
+      console.error('Erro ao salvar ingressos', error);
+    }
+  };
+
+  const handlePayment = async () => {
     if (fullTickets + halfTickets === selectedSeats.length) {
       if (
         cardDetails.holderName &&
@@ -38,12 +61,28 @@ const PaymentScreen = ({ route, navigation }) => {
         cardDetails.expiryDate &&
         cardDetails.securityCode
       ) {
+        const newTicket = {
+          fullTickets,
+          halfTickets,
+          movieTitle,
+          sessionTime,
+          selectedSeats,
+          totalPrice,
+          paymentMethod,
+        };
+
         Alert.alert(
           'Compra Concluída',
           `Seu pagamento de R$ ${totalPrice.toFixed(
             2
           )} foi processado com sucesso por ${paymentMethod}!`,
-          [{ text: 'OK', onPress: () => navigation.navigate('TabNavigator', { screen: 'Filmes' }) }]
+          [{
+            text: 'OK',
+            onPress: async () => {
+              await saveTickets(newTicket);
+              navigation.navigate('TabNavigator', { screen: 'Filmes' });
+            }
+          }]
         );
       } else {
         Alert.alert('Erro', 'Por favor, preencha todas as informações do cartão.');

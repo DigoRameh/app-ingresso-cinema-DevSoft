@@ -1,19 +1,22 @@
 import React, { createContext, useState, useContext } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null); // Armazenando informações do usuário
+  const [user, setUser] = useState(null);
 
   const login = (userInfo) => {
     setIsAuthenticated(true);
-    setUser(userInfo); // Ao logar, configuramos as informações do usuário
+    setUser(userInfo);
+    AsyncStorage.setItem('loggedInUser', JSON.stringify(userInfo)); // Salvar o usuário logado no AsyncStorage
   };
 
-  const logout = () => {
+  const logout = async () => {
     setIsAuthenticated(false);
-    setUser(null); // Limpar as informações do usuário ao fazer logout
+    setUser(null);
+    await AsyncStorage.removeItem('loggedInUser'); // Remover o usuário logado do AsyncStorage
   };
 
   return (

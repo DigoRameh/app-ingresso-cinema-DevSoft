@@ -12,7 +12,7 @@ import ProfileScreen from './ProfileScreen';
 import SearchPage from './BuscaScreen'; 
 import SeatSelectionScreen from './SeatSelection';
 import PaymentScreen from './PaymentScreen';
-// import IngressoScreen from './IngressoScreen'; 
+import IngressoScreen from './IngressoScreen'; 
 import Icon from 'react-native-vector-icons/FontAwesome'; // Usando FontAwesome
 
 
@@ -42,7 +42,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Ingressos"
-        component={Filmes}
+        component={IngressoScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Icon name="ticket" size={size} color={color} />
