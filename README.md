@@ -18,3 +18,9 @@ FastTickets é um aplicativo desenvolvido para facilitar a compra e o gerenciame
 ## 📂 Estrutura do Projeto
 
 - **docs/**: Contém documentação adicional do projeto, como arquitetura, fluxos de dados.
+
+## Colaboradores
+
+- Anthony Bachiega
+- Matheus Valério
+- Rodrigo Rameh
